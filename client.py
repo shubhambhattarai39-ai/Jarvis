@@ -18,10 +18,12 @@ while True:
 
     try:
         prompt = recognizer.recognize_google(audio_data)
+        print("You:", prompt)
         if prompt.lower() == "exit":
             client.send(prompt.encode())
             break
         client.send(prompt.encode())
+        print("Getting data!!")
         data = client.recv(1024).decode()
         print("Jarvis:", data)
         
