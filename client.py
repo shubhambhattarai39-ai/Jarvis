@@ -5,22 +5,38 @@ import pyttsx3
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 recognizer = sr.Recognizer()
-engine = pyttsx3.init()
 
 client.connect(("192.168.1.13", 5000))
 
-engine.setProperty("rate", 150)
-engine.setProperty("volume", 0.9)
+
+def speak(text):
+    engine = pyttsx3.init()
+
+    engine.setProperty("rate", 150)
+    engine.setProperty("volume", 0.9)
+
+    voices = engine.getProperty("voices")
+
+    # Try the first voice for now
+    engine.setProperty("voice", voices[0].id)
+
+    engine.say(text)
+    engine.runAndWait()
+    engine.stop()
+
 
 with sr.Microphone() as source:
+
     print("Adjusting for background noise... Please wait.")
     recognizer.adjust_for_ambient_noise(source, duration=1)
 
     while True:
+
         print("Listening... Speak now!")
 
         try:
             audio_data = recognizer.listen(source)
+
             print("Processing audio...")
 
             prompt = recognizer.recognize_google(audio_data)
@@ -33,20 +49,19 @@ with sr.Microphone() as source:
 
             client.send(prompt.encode())
 
-            print("Getting data!!")
+            print("Getting data...")
 
             data = client.recv(1024).decode()
 
             print("Jarvis:", data)
 
-            engine.say(data)
-            engine.runAndWait()
+            speak(data)
 
         except sr.UnknownValueError:
+
             print("Sorry, I could not understand the audio.")
 
-        except sr.RequestError as e:
-            print(f"Could not request results from Google Speech Recognition service; {e}")
+            speak("Sorry, I could not understand the audio.")
+
 
 client.close()
-engine.stop()
