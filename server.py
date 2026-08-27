@@ -11,7 +11,7 @@ def get_reply(prompt):
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server.bind(("127.0.0.1", 5000))
+server.bind(("0.0.0.0", 5000))
 server.listen(1)
 
 print("Waiting for client...")
