@@ -19,7 +19,7 @@ def speak(text):
     voices = engine.getProperty("voices")
 
     # Try the first voice for now
-    engine.setProperty("voice", voices[0].id)
+    engine.setProperty("voice", voices[1].id)
 
     for voice in voices:
         if "GB" in voice.id or "United Kingdom" in voice.name or "Hazel" in voice.name:
@@ -30,6 +30,7 @@ def speak(text):
     engine.runAndWait()
     engine.stop()
 
+speak("Tero bau")
 
 with sr.Microphone() as source:
 
