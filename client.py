@@ -9,6 +9,7 @@ recognizer = sr.Recognizer()
 client.connect(("192.168.1.13", 5000))
 
 
+
 def speak(text):
     engine = pyttsx3.init()
 
@@ -16,9 +17,15 @@ def speak(text):
     engine.setProperty("volume", 0.9)
 
     voices = engine.getProperty("voices")
+    voices = engine.getProperty('voices')
 
     # Try the first voice for now
     engine.setProperty("voice", voices[0].id)
+
+    for voice in voices:
+        if "GB" in voice.id or "United Kingdom" in voice.name or "Hazel" in voice.name:
+            engine.setProperty('voice', voice.id)
+            break
 
     engine.say(text)
     engine.runAndWait()
