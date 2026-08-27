@@ -17,7 +17,6 @@ def speak(text):
     engine.setProperty("volume", 0.9)
 
     voices = engine.getProperty("voices")
-    voices = engine.getProperty('voices')
 
     # Try the first voice for now
     engine.setProperty("voice", voices[0].id)
