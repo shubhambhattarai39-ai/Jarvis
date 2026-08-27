@@ -1,10 +1,14 @@
 import socket
 import speech_recognition as sr
+import pyttsx3
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 recognizer = sr.Recognizer()
+engine = pyttsx3.init()
 
 client.connect(("192.168.1.13", 5000))
+engine.setProperty('rate', 150)
+engine.setProperty('volume', 0.9)
 
 while True:
 
@@ -25,6 +29,8 @@ while True:
         client.send(prompt.encode())
         print("Getting data!!")
         data = client.recv(1024).decode()
+        engine.say(data)
+        engine.runAndWait()
         print("Jarvis:", data)
         
     except sr.UnknownValueError:
@@ -33,11 +39,5 @@ while True:
     except sr.RequestError as e:
         print(f"Could not request results from Google Speech Recognition service; {e}")
 
-
-
-    
-   
-
-   
-
 client.close()
+engine.stop()
