@@ -1,40 +1,20 @@
-from ollama import chat
 import socket
 
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-def get_reply(prompt):
-    response = chat(
-        model="qwen2.5:3b",
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
-    )
-
-    return response.message.content
-
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-server.bind(("0.0.0.0", 5000))
-server.listen(1)
-
-print("Waiting for client...")
-
-client, address = server.accept()
-print("Client connected:", address)
+client.connect(("192.168.1.13", 5000))
 
 while True:
-    prompt = client.recv(1024).decode()
-
-    if not prompt:
-        break
+    prompt = input("You: ")
 
     if prompt.lower() == "exit":
+        client.send(prompt.encode())
         break
 
-    response = get_reply(prompt)
+    client.send(prompt.encode())
 
-    client.send(response.encode())
+    data = client.recv(1024).decode()
+
+    print("Jarvis:", data)
 
 client.close()
-server.close()
